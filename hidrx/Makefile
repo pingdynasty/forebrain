@@ -15,4 +15,4 @@ upload: device/firmware.bin
 clean:
 	cd device; make -f build/Makefile clean
 	cd client; make clean
-	rm tools/lpc-flash
+	rm -f tools/lpc-flash
