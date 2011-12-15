@@ -54,9 +54,9 @@ firmware: $(OBJS)
 	-@echo "*** Converting... ***"
 	$(OBJCOPY) $(OCFLAGS) -O binary $(PRJPATH)/firmware.elf firmware.bin
 	$(OBJCOPY) $(OCFLAGS) -O ihex $(PRJPATH)/firmware.elf firmware.hex
-	-@echo ""
-	-@echo "*** Adding Checksum... ***"
-	$(CHKSM) firmware.bin
+#	-@echo ""
+#	-@echo "*** Adding Checksum... ***"
+#	$(CHKSM) firmware.bin
 	-@echo ""
 	-@echo "*** Getting Size information... ***"
 	$(SIZE) $(PRJPATH)/firmware.elf
