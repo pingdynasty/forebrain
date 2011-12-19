@@ -99,8 +99,8 @@ int main(int argc, char *argv[]) {
 		  fprintf(stderr,"Error: Read failed\n");
 		  exit(253);
 	  }
-
-	  for (int idx=0; idx<CRC_CNT; idx++) {
+	  int idx;
+	  for (idx=0; idx<CRC_CNT; idx++) {
 		  crc += buf[idx];
 	  }
 	  crc = (~crc) + 1;

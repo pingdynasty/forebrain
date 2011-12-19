@@ -1,21 +1,28 @@
+LPCFLASH = ../tools/lpc-flash
+LPCFIX = ../tools/lpcfix
+DESTINATION = /Volumes/CRP\ DISABLD/
+
+
 all: device/firmware.bin client/hidclient
 
-tools/lpc-flash: tools/lpc-flash.c
+$(LPCFLASH): $(LPCFLASH).c
+	gcc $< -o $@
+
+$(LPCFIX): $(LPCFIX).c
 	gcc $< -o $@
 
 client/hidclient: force
 	cd client; $(MAKE)
 
-device/firmware.bin: tools/lpc-flash force
-	cd device; $(MAKE) -f build/Makefile
+device/firmware.bin: force
+	cd device; $(MAKE) -f build/Makefile compile
 
-upload: device/firmware.bin
-	cp -i device/firmware.bin /Volumes/CRP\ DISABLD/
+upload: device/firmware.bin $(LPCFLASH)
+	$(UPLOAD) device/firmware.bin $(DESTINATION)
 
 clean:
 	cd device; $(MAKE) -f build/Makefile clean
 	cd client; $(MAKE) clean
-	rm -f tools/lpc-flash
 
 force :
 	true

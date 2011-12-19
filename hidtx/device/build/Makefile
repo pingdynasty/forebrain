@@ -15,7 +15,7 @@ LD = $(COMPILER)gcc
 SIZE = $(COMPILER)size
 OBJCOPY = $(COMPILER)objcopy
 OBJDUMP = $(COMPILER)objdump
-CHKSM = ~/devel/r0ket/tools/bootloader/lpcfix -c -v -v
+CHKSM = ../../tools/lpcfix -c -v -v
 PRJPATH = ./build
 
 LD_SCRIPT = $(PRJPATH)/linker.ld
@@ -47,20 +47,28 @@ $(PRJPATH)/%.o : %.c
 $(PRJPATH)/%.o : %.s
 	$(AS) $(ASFLAGS) -o $@ $<
 
-firmware: $(OBJS)
+compile: $(OBJS)
 	-@echo "*** Compiling... ***"
 	$(LD) $(LDFLAGS) -T $(LD_SCRIPT) -o $(PRJPATH)/firmware.elf $(OBJS) -lm
 	-@echo ""
+
+convert: compile
 	-@echo "*** Converting... ***"
 	$(OBJCOPY) $(OCFLAGS) -O binary $(PRJPATH)/firmware.elf firmware.bin
 	$(OBJCOPY) $(OCFLAGS) -O ihex $(PRJPATH)/firmware.elf firmware.hex
 	-@echo ""
+
+checksum: convert
 	-@echo "*** Adding Checksum... ***"
 	$(CHKSM) firmware.bin
 	-@echo ""
+
+size:	checksum
 	-@echo "*** Getting Size information... ***"
 	$(SIZE) $(PRJPATH)/firmware.elf
 	-@echo ""
+
+firmware: size
 	-@echo "*** Compile complete! ***"
 clean:
 	rm -f $(OBJS) $(PRJPATH)/firmware.elf firmware.bin firmware.hex
