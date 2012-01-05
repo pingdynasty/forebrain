@@ -1,7 +1,6 @@
 LPCFLASH = ../tools/lpc-flash
 LPCFIX = ../tools/lpcfix
-DESTINATION = /Volumes/CRP\ DISABLD/
-
+DESTINATION = /Volumes/CRP\ DISABLD/firmware.bin
 
 all: device/firmware.bin client/hidclient
 
@@ -15,10 +14,10 @@ client/hidclient: force
 	cd client; $(MAKE)
 
 device/firmware.bin: force
-	cd device; $(MAKE) -f build/Makefile compile
+	cd device; $(MAKE) -f build/Makefile convert
 
 upload: device/firmware.bin $(LPCFLASH)
-	$(UPLOAD) device/firmware.bin $(DESTINATION)
+	$(LPCFLASH) device/firmware.bin $(DESTINATION)
 
 clean:
 	cd device; $(MAKE) -f build/Makefile clean
